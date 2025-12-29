@@ -34,7 +34,8 @@ module Bootstrap
           path_bar_visible? &&
           save_to_disk_default? &&
           toolbar_rollover_instant? &&
-          sidebar_icon_size_correct?
+          sidebar_icon_size_correct? &&
+          dialogs_expanded?
       end
 
       def install!
@@ -51,6 +52,7 @@ module Bootstrap
         configure_save_location
         configure_toolbar_rollover
         configure_sidebar_icon_size
+        configure_expanded_dialogs
         restart_finder
       end
 
@@ -184,6 +186,26 @@ module Bootstrap
 
       def configure_sidebar_icon_size
         shell.run("defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int #{SIDEBAR_ICON_SIZE}")
+      end
+
+      def dialogs_expanded?
+        save1 = shell.run('defaults read NSGlobalDomain NSNavPanelExpandedStateForSaveMode')
+        save2 = shell.run('defaults read NSGlobalDomain NSNavPanelExpandedStateForSaveMode2')
+        print1 = shell.run('defaults read NSGlobalDomain PMPrintingExpandedStateForPrint')
+        print2 = shell.run('defaults read NSGlobalDomain PMPrintingExpandedStateForPrint2')
+        save1.success? && save1.output.strip == '1' &&
+          save2.success? && save2.output.strip == '1' &&
+          print1.success? && print1.output.strip == '1' &&
+          print2.success? && print2.output.strip == '1'
+      end
+
+      def configure_expanded_dialogs
+        # Expand save panel by default
+        shell.run('defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true')
+        shell.run('defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true')
+        # Expand print panel by default
+        shell.run('defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true')
+        shell.run('defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true')
       end
 
       def restart_finder

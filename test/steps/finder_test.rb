@@ -58,6 +58,14 @@ class FinderTest < Minitest::Test
       Struct.new(:success?, :stderr, :output).new(true, '', '0')
     @shell.run_results['defaults read NSGlobalDomain NSTableViewDefaultSizeMode'] =
       Struct.new(:success?, :stderr, :output).new(true, '', '1')
+    @shell.run_results['defaults read NSGlobalDomain NSNavPanelExpandedStateForSaveMode'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', '1')
+    @shell.run_results['defaults read NSGlobalDomain NSNavPanelExpandedStateForSaveMode2'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', '1')
+    @shell.run_results['defaults read NSGlobalDomain PMPrintingExpandedStateForPrint'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', '1')
+    @shell.run_results['defaults read NSGlobalDomain PMPrintingExpandedStateForPrint2'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', '1')
   end
 
   def test_name
@@ -151,6 +159,14 @@ class FinderTest < Minitest::Test
   def test_install_sets_sidebar_icon_size
     @step.install!
     assert_includes @shell.commands_run, 'defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1'
+  end
+
+  def test_install_expands_dialogs
+    @step.install!
+    assert_includes @shell.commands_run, 'defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true'
+    assert_includes @shell.commands_run, 'defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true'
+    assert_includes @shell.commands_run, 'defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true'
+    assert_includes @shell.commands_run, 'defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true'
   end
 
   def test_install_restarts_finder

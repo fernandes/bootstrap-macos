@@ -56,14 +56,23 @@ class DockTest < Minitest::Test
     refute @step.installed?
   end
 
-  def test_installed_returns_true_when_configured
+  def setup_all_configured
     @shell.run_results['defaults read com.apple.dock persistent-apps'] =
       Struct.new(:success?, :stderr, :output).new(true, '', "()")
     @shell.run_results['defaults read com.apple.dock tilesize'] =
       Struct.new(:success?, :stderr, :output).new(true, '', '36')
     @shell.run_results['defaults read com.apple.dock mineffect'] =
       Struct.new(:success?, :stderr, :output).new(true, '', 'scale')
+    @shell.run_results['defaults read com.apple.dock show-recents'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', '0')
+    @shell.run_results['defaults read com.apple.dock show-process-indicators'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', '0')
+    @shell.run_results['defaults read NSGlobalDomain NSAutomaticWindowAnimationsEnabled'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', '0')
+  end
 
+  def test_installed_returns_true_when_configured
+    setup_all_configured
     assert @step.installed?
   end
 
@@ -82,18 +91,28 @@ class DockTest < Minitest::Test
     assert_includes @shell.commands_run, 'defaults write com.apple.dock mineffect -string "scale"'
   end
 
+  def test_install_hides_recents
+    @step.install!
+    assert_includes @shell.commands_run, 'defaults write com.apple.dock show-recents -bool false'
+  end
+
+  def test_install_hides_process_indicators
+    @step.install!
+    assert_includes @shell.commands_run, 'defaults write com.apple.dock show-process-indicators -bool false'
+  end
+
+  def test_install_disables_window_animations
+    @step.install!
+    assert_includes @shell.commands_run, 'defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false'
+  end
+
   def test_install_restarts_dock
     @step.install!
     assert_includes @shell.commands_run, 'killall Dock'
   end
 
   def test_run_skips_when_already_configured
-    @shell.run_results['defaults read com.apple.dock persistent-apps'] =
-      Struct.new(:success?, :stderr, :output).new(true, '', "()")
-    @shell.run_results['defaults read com.apple.dock tilesize'] =
-      Struct.new(:success?, :stderr, :output).new(true, '', '36')
-    @shell.run_results['defaults read com.apple.dock mineffect'] =
-      Struct.new(:success?, :stderr, :output).new(true, '', 'scale')
+    setup_all_configured
 
     result = @step.run!
 
