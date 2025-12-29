@@ -1,0 +1,31 @@
+Bootstrap macOS
+
+## Install Xcode
+
+```
+xcode-select --install
+```
+
+## Install Homebrew
+
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+### Disable Analytics
+
+==> Homebrew has enabled anonymous aggregate formulae and cask analytics.
+Read the analytics documentation (and how to opt-out) here:
+  https://docs.brew.sh/Analytics
+No analytics data has been sent yet (nor will any be during this install run).
+
+### Install zprofile
+
+echo >> /Users/fernandes/.zprofile
+echo 'eval "$(/usr/local/bin/brew shellenv)"' >> /Users/fernandes/.zprofile
+eval "$(/usr/local/bin/brew shellenv)"
+
+## Claude Code
+
+brew install --cask claude-code
+
