@@ -11,6 +11,11 @@ require 'bootstrap/steps/homebrew'
 require 'bootstrap/steps/display'
 require 'bootstrap/steps/modifier_keys'
 require 'bootstrap/steps/dock'
+require 'bootstrap/steps/finder'
+require 'bootstrap/steps/screenshots'
+require 'bootstrap/steps/safari'
+require 'bootstrap/steps/activity_monitor'
+require 'bootstrap/steps/wallpaper'
 require 'bootstrap/steps/claude_code'
 
 steps = [
@@ -19,6 +24,11 @@ steps = [
   Bootstrap::Steps::Display.new,
   Bootstrap::Steps::ModifierKeys.new,
   Bootstrap::Steps::Dock.new,
+  Bootstrap::Steps::Finder.new,
+  Bootstrap::Steps::Screenshots.new,
+  Bootstrap::Steps::Safari.new,
+  Bootstrap::Steps::ActivityMonitor.new,
+  Bootstrap::Steps::Wallpaper.new,
   Bootstrap::Steps::ClaudeCode.new
 ]
 

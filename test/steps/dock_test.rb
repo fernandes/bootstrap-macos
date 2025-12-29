@@ -45,11 +45,24 @@ class DockTest < Minitest::Test
     refute @step.installed?
   end
 
+  def test_installed_returns_false_when_mineffect_wrong
+    @shell.run_results['defaults read com.apple.dock persistent-apps'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', "()")
+    @shell.run_results['defaults read com.apple.dock tilesize'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', '36')
+    @shell.run_results['defaults read com.apple.dock mineffect'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', 'genie')
+
+    refute @step.installed?
+  end
+
   def test_installed_returns_true_when_configured
     @shell.run_results['defaults read com.apple.dock persistent-apps'] =
       Struct.new(:success?, :stderr, :output).new(true, '', "()")
     @shell.run_results['defaults read com.apple.dock tilesize'] =
       Struct.new(:success?, :stderr, :output).new(true, '', '36')
+    @shell.run_results['defaults read com.apple.dock mineffect'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', 'scale')
 
     assert @step.installed?
   end
@@ -64,6 +77,11 @@ class DockTest < Minitest::Test
     assert_includes @shell.commands_run, 'defaults write com.apple.dock tilesize -int 36'
   end
 
+  def test_install_sets_mineffect
+    @step.install!
+    assert_includes @shell.commands_run, 'defaults write com.apple.dock mineffect -string "scale"'
+  end
+
   def test_install_restarts_dock
     @step.install!
     assert_includes @shell.commands_run, 'killall Dock'
@@ -74,6 +92,8 @@ class DockTest < Minitest::Test
       Struct.new(:success?, :stderr, :output).new(true, '', "()")
     @shell.run_results['defaults read com.apple.dock tilesize'] =
       Struct.new(:success?, :stderr, :output).new(true, '', '36')
+    @shell.run_results['defaults read com.apple.dock mineffect'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', 'scale')
 
     result = @step.run!
 

@@ -6,19 +6,21 @@ module Bootstrap
   module Steps
     class Dock < Step
       TILE_SIZE = 36
-      PLIST_PATH = File.expand_path('~/Library/Preferences/com.apple.dock.plist')
+      # Minimize effect: genie, scale, suck
+      MINIMIZE_EFFECT = 'scale'
 
       def name
         'Dock Configuration'
       end
 
       def installed?
-        persistent_apps_empty? && tile_size_correct?
+        persistent_apps_empty? && tile_size_correct? && minimize_effect_correct?
       end
 
       def install!
         clear_persistent_apps
         set_tile_size
+        set_minimize_effect
         restart_dock
       end
 
@@ -45,6 +47,15 @@ module Bootstrap
 
       def set_tile_size
         shell.run("defaults write com.apple.dock tilesize -int #{TILE_SIZE}")
+      end
+
+      def minimize_effect_correct?
+        result = shell.run('defaults read com.apple.dock mineffect')
+        result.success? && result.output.strip == MINIMIZE_EFFECT
+      end
+
+      def set_minimize_effect
+        shell.run("defaults write com.apple.dock mineffect -string \"#{MINIMIZE_EFFECT}\"")
       end
 
       def restart_dock
