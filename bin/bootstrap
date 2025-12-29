@@ -10,6 +10,7 @@ require 'bootstrap/steps/xcode'
 require 'bootstrap/steps/homebrew'
 require 'bootstrap/steps/display'
 require 'bootstrap/steps/modifier_keys'
+require 'bootstrap/steps/dock'
 require 'bootstrap/steps/claude_code'
 
 steps = [
@@ -17,6 +18,7 @@ steps = [
   Bootstrap::Steps::Homebrew.new,
   Bootstrap::Steps::Display.new,
   Bootstrap::Steps::ModifierKeys.new,
+  Bootstrap::Steps::Dock.new,
   Bootstrap::Steps::ClaudeCode.new
 ]
 
