@@ -1,6 +1,10 @@
 # Bootstrap Configuration
 # Copy this file to config.yml and customize
 
+# Mac settings
+mac:
+  hostname: macbook
+
 # Bitwarden/Vaultwarden settings
 bitwarden:
   server: https://vault.bitwarden.com

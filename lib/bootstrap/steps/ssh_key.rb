@@ -19,6 +19,7 @@ module Bootstrap
       def install!
         ensure_ssh_directory
         session = unlock_vault
+        sync_vault(session)
         fetch_and_save_keys(session)
         set_permissions
       end
@@ -56,14 +57,18 @@ module Bootstrap
         status = JSON.parse(status_result.output) rescue {}
 
         if status['status'] == 'unauthenticated'
-          puts 'Bitwarden: Please login...'
+          output 'Bitwarden: Please login...'
           shell.run_interactive('bw login')
         end
 
         # Unlock and get session
-        puts 'Bitwarden: Please unlock vault...'
+        output 'Bitwarden: Please unlock vault...'
         unlock_result = shell.run_interactive_with_output('bw unlock --raw')
         unlock_result.output.strip
+      end
+
+      def sync_vault(session)
+        shell.run("bw sync --session '#{session}'")
       end
 
       def fetch_and_save_keys(session)

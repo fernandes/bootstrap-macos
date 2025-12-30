@@ -4,8 +4,16 @@ module Bootstrap
   class Step
     attr_reader :shell
 
+    class << self
+      attr_accessor :silent
+    end
+
     def initialize(shell: Shell)
       @shell = shell
+    end
+
+    def output(message)
+      puts message unless Bootstrap::Step.silent
     end
 
     def name

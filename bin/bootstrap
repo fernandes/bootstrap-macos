@@ -6,6 +6,7 @@ $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 require 'bootstrap/shell'
 require 'bootstrap/step'
 require 'bootstrap/runner'
+require 'bootstrap/steps/hostname'
 require 'bootstrap/steps/xcode'
 require 'bootstrap/steps/homebrew'
 require 'bootstrap/steps/display'
@@ -22,9 +23,11 @@ require 'bootstrap/steps/keyboard'
 require 'bootstrap/steps/trackpad'
 require 'bootstrap/steps/bitwarden'
 require 'bootstrap/steps/ssh_key'
+require 'bootstrap/steps/mise'
 require 'bootstrap/steps/control'
 
 steps = [
+  Bootstrap::Steps::Hostname.new,
   Bootstrap::Steps::Xcode.new,
   Bootstrap::Steps::Homebrew.new,
   Bootstrap::Steps::Display.new,
@@ -41,6 +44,7 @@ steps = [
   Bootstrap::Steps::Trackpad.new,
   Bootstrap::Steps::Bitwarden.new,
   Bootstrap::Steps::SshKey.new,
+  Bootstrap::Steps::Mise.new,
   Bootstrap::Steps::Control.new
 ]
 

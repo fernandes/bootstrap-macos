@@ -6,3 +6,6 @@ $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
 require 'bootstrap/shell'
 require 'bootstrap/step'
+
+# Silence output during tests
+Bootstrap::Step.silent = true
