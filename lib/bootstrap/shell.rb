@@ -24,6 +24,12 @@ module Bootstrap
       Result.new(stdout: '', stderr: '', status: $?)
     end
 
+    def self.run_interactive_with_output(command)
+      # Uses backticks but bw prompts via /dev/tty so it's still interactive
+      output = `#{command}`
+      Result.new(stdout: output, stderr: '', status: $?)
+    end
+
     def self.success?(command)
       run(command).success?
     end

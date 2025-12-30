@@ -20,6 +20,9 @@ require 'bootstrap/steps/menu_bar'
 require 'bootstrap/steps/sound'
 require 'bootstrap/steps/keyboard'
 require 'bootstrap/steps/trackpad'
+require 'bootstrap/steps/bitwarden'
+require 'bootstrap/steps/ssh_key'
+require 'bootstrap/steps/control'
 
 steps = [
   Bootstrap::Steps::Xcode.new,
@@ -35,7 +38,10 @@ steps = [
   Bootstrap::Steps::MenuBar.new,
   Bootstrap::Steps::Sound.new,
   Bootstrap::Steps::Keyboard.new,
-  Bootstrap::Steps::Trackpad.new
+  Bootstrap::Steps::Trackpad.new,
+  Bootstrap::Steps::Bitwarden.new,
+  Bootstrap::Steps::SshKey.new,
+  Bootstrap::Steps::Control.new
 ]
 
 runner = Bootstrap::Runner.new(steps: steps)

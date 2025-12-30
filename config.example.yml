@@ -1,0 +1,16 @@
+# Bootstrap Configuration
+# Copy this file to config.yml and customize
+
+# Bitwarden/Vaultwarden settings
+bitwarden:
+  server: https://vault.bitwarden.com
+  ssh_item: "SSH Key"
+
+# SSH settings
+ssh:
+  key_name: id_ed25519
+
+# Control repo (optional)
+control:
+  repo: git@github.com:user/control.git
+  caco_repo: https://github.com/fernandes/caco
