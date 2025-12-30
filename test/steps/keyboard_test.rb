@@ -34,6 +34,8 @@ class KeyboardTest < Minitest::Test
       Struct.new(:success?, :stderr, :output).new(true, '', '2')
     @shell.run_results['defaults read NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled'] =
       Struct.new(:success?, :stderr, :output).new(true, '', '0')
+    @shell.run_results['defaults read NSGlobalDomain NSAutomaticCapitalizationEnabled'] =
+      Struct.new(:success?, :stderr, :output).new(true, '', '0')
   end
 
   def test_name
@@ -75,6 +77,11 @@ class KeyboardTest < Minitest::Test
   def test_install_disables_auto_punctuation
     @step.install!
     assert_includes @shell.commands_run, 'defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false'
+  end
+
+  def test_install_disables_auto_capitalization
+    @step.install!
+    assert_includes @shell.commands_run, 'defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false'
   end
 
   def test_install_configures_dictation_shortcut

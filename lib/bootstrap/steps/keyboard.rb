@@ -21,7 +21,8 @@ module Bootstrap
           initial_key_repeat_correct? &&
           fn_key_usage_correct? &&
           keyboard_navigation_enabled? &&
-          auto_punctuation_disabled?
+          auto_punctuation_disabled? &&
+          auto_capitalization_disabled?
       end
 
       def install!
@@ -30,6 +31,7 @@ module Bootstrap
         set_fn_key_usage
         enable_keyboard_navigation
         disable_auto_punctuation
+        disable_auto_capitalization
         configure_dictation_shortcut
       end
 
@@ -78,6 +80,15 @@ module Bootstrap
 
       def disable_auto_punctuation
         shell.run('defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false')
+      end
+
+      def auto_capitalization_disabled?
+        result = shell.run('defaults read NSGlobalDomain NSAutomaticCapitalizationEnabled')
+        result.success? && result.output.strip == '0'
+      end
+
+      def disable_auto_capitalization
+        shell.run('defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false')
       end
 
       def configure_dictation_shortcut
